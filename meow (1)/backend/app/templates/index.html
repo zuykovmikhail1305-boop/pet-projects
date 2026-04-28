@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ app_title }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-top">
+        <div class="sidebar-logo" aria-hidden="true">
+          <img src="/static/logo.svg" alt="Logo" />
+        </div>
+
+        <div class="chat-title-pill" id="activeChatPill">New Chat</div>
+
+        <button class="icon-btn new-chat-btn" id="newChatBtn" aria-label="Создать новый чат">+</button>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-label">История</div>
+        <div id="chatList" class="chat-list"></div>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="status-row">
+          <span class="status-dot"></span>
+          <span id="healthText">Проверка Ollama...</span>
+        </div>
+        <div class="model-badge">{{ default_model }}</div>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <section class="messages-wrap" id="messagesWrap">
+        <section class="conversation" id="conversation"></section>
+      </section>
+
+      <section class="action-row">
+        <button class="copy-code-btn" id="copyLastBtn" aria-label="Копировать Lua код" title="Копировать Lua код">
+          <img src="/static/copy.svg" alt="copy" />
+          <span>Copy Lua</span>
+        </button>
+      </section>
+
+      <section class="composer">
+        <div class="composer-inner">
+          <textarea
+            id="promptInput"
+            placeholder="Введите запрос"
+            rows="1"
+          ></textarea>
+
+          <div class="attachment-strip hidden" id="attachmentStrip"></div>
+
+          <div class="composer-bottom">
+            <button class="plus-btn" id="attachBtn" aria-label="Добавить файл">+</button>
+
+            <div class="composer-actions">
+              <button class="primary-btn" id="runBtn">
+                <span>Пуск</span>
+                <img src="/static/logo.svg" alt="logo" />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <input
+          type="file"
+          id="fileInput"
+          class="hidden-file-input"
+          multiple
+          accept=".txt,.md,.json,.lua,.csv,.pdf"
+        />
+      </section>
+    </main>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

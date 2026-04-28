@@ -1,0 +1,51 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: local-ai-agent-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    environment:
+      OLLAMA_HOST: 0.0.0.0:11434
+      OLLAMA_KEEP_ALIVE: 24h
+    restart: unless-stopped
+
+  ollama-init:
+    image: ollama/ollama:latest
+    container_name: local-ai-agent-ollama-init
+    depends_on:
+      - ollama
+    volumes:
+      - ./scripts:/scripts:ro
+      - ollama_data:/root/.ollama
+    entrypoint: ["/bin/sh", "/scripts/pull-model.sh"]
+    environment:
+      OLLAMA_URL: http://ollama:11434
+      DEFAULT_MODEL: qwen2.5-coder:7b
+    restart: "no"
+
+  app:
+    build:
+      context: ./backend
+    container_name: local-ai-agent-app
+    depends_on:
+      - ollama
+    environment:
+      APP_TITLE: MISIS RUDN Low cortizol
+      APP_HOST: 0.0.0.0
+      APP_PORT: 8000
+      OLLAMA_URL: http://ollama:11434
+      DEFAULT_MODEL: qwen2.5-coder:7b
+      MAX_ITERATIONS: 3
+      DB_PATH: /data/app.db
+      UPLOADS_DIR: /data/uploads
+    volumes:
+      - app_data:/data
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+volumes:
+  ollama_data:
+  app_data:
